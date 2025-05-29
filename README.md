@@ -197,3 +197,42 @@ uvicorn src.api:app --reload
 - `GET /logs`  — Returns validated logs (you can limit the amount with the `limit` parameter).
 - `GET /report/state_by_room`  — Returns the state by room report.
 - `GET /report/critical_alerts`  — Returns the critical alerts report.
+
+### 5. Exporting Reports as CSV or XLSX
+- `GET /report/state_by_room/export?format=csv|xlsx` — Download the state by room report as CSV or XLSX.
+- `GET /report/critical_alerts/export?format=csv|xlsx` — Download the critical alerts report as CSV or XLSX.
+
+Example URLs:
+- Download state by room as CSV: `http://localhost:8000/report/state_by_room/export?format=csv`
+- Download critical alerts as XLSX: `http://localhost:8000/report/critical_alerts/export?format=xlsx`
+
+Example cURL requests:
+```bash
+curl -o state_by_room_report.csv "http://localhost:8000/report/state_by_room/export?format=csv"
+curl -o state_by_room_report.xlsx "http://localhost:8000/report/state_by_room/export?format=xlsx"
+curl -o critical_alerts_report.csv "http://localhost:8000/report/critical_alerts/export?format=csv"
+curl -o critical_alerts_report.xlsx "http://localhost:8000/report/critical_alerts/export?format=xlsx"
+```
+
+### 6. Query Logs by Date Range, Room, and Sensor
+- `GET /logs/query?start_time_date=YYYY-MM-DD HH:MM:SS&end_time_date=YYYY-MM-DD HH:MM:SS&room=RoomName[&sensor=SensorName]` — Returns logs filtered by date range, room, and optionally sensor.
+
+Example URL:
+- `http://localhost:8000/logs/query?start_time_date=2024-06-01%2012:00:00&end_time_date=2024-06-01%2013:00:00&room=Room1`
+
+Example cURL requests:
+```bash
+curl "http://localhost:8000/logs/query?start_time_date=2024-06-01%2012:00:00&end_time_date=2024-06-01%2013:00:00&room=Room1"
+curl "http://localhost:8000/logs/query?start_time_date=2024-06-01%2012:00:00&end_time_date=2024-06-01%2013:00:00&room=Room2&sensor=SensorA"
+```
+
+#### Exporting Query Results
+- `GET /logs/query/export?start_time_date=...&end_time_date=...&room=...&sensor=...&format=csv|xlsx` — Download the filtered logs as CSV or XLSX.
+
+Example:
+```bash
+curl -o filtered_logs.csv "http://localhost:8000/logs/query/export?start_time_date=2024-06-01%2012:00:00&end_time_date=2024-06-01%2013:00:00&room=Room1&format=csv"
+curl -o filtered_logs.xlsx "http://localhost:8000/logs/query/export?start_time_date=2024-06-01%2012:00:00&end_time_date=2024-06-01%2013:00:00&room=Room2&sensor=SensorA&format=xlsx"
+```
+
+For extra info about decision making for this project, please read the [EXPLAINME.md](EXPLAINME.md) file.

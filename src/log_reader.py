@@ -40,7 +40,7 @@ class LogReader:
         """
         df = pd.read_csv(self.filepath)
         logs = []
-        for _, row in df.iterrows():
+        for idx, row in df.iterrows():
             if not self._is_valid_row(row):
                 continue
             try:
@@ -54,8 +54,8 @@ class LogReader:
                     mensaje=row.get("mensaje", None)
                 )
                 logs.append(log)
-            except Exception:
-                # Invalid data type or parsing error
+            except (ValueError, TypeError) as e:
+                print(f"[WARN] Skipping row {idx}: {e}")
                 continue
         return logs
 
